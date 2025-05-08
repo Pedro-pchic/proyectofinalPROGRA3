@@ -1,10 +1,7 @@
 package com.enlatadosmg.enlatado.usuario;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -13,6 +10,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 @Setter
 
 @Entity
+@Table(name = "usuarios")
 public class ModeloUsuario {
 
     @Id

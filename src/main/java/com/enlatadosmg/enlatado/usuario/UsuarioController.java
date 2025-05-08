@@ -13,39 +13,39 @@ public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
 
-    // Crear un nuevo usuario
     @PostMapping
-    public ResponseEntity<ModeloUsuario> createUsuario(@RequestBody ModeloUsuario usuario) {
-        ModeloUsuario nuevoUsuario = usuarioService.save(usuario);
-        return ResponseEntity.ok(nuevoUsuario);
+    public ModeloUsuario crearUsuario(@RequestBody ModeloUsuario usuario){
+        return usuarioService.guardarUsuario(usuario);
     }
 
-    // Obtener todos los usuarios
     @GetMapping
-    public ResponseEntity<List<ModeloUsuario>> getAllUsuarios() {
-        List<ModeloUsuario> usuarios = usuarioService.findAll();
-        return ResponseEntity.ok(usuarios);
+    public  List<ModeloUsuario> obtenerUsuarios(){
+        return usuarioService.obtenerTodos();
     }
-
-    // Obtener un usuario por ID
-    @GetMapping("/{id}")
-    public ResponseEntity<ModeloUsuario> getUsuarioById(@PathVariable int id) {
-        return usuarioService.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-
-    // Actualizar un usuario existente
-    @PutMapping("/{id}")
-    public ResponseEntity<ModeloUsuario> updateUsuario(@PathVariable int id, @RequestBody ModeloUsuario detallesusuario) {
-        ModeloUsuario usuarioActualizado = usuarioService.update(id, detallesusuario);
-        return usuarioActualizado != null ? ResponseEntity.ok(usuarioActualizado) : ResponseEntity.notFound().build();
-    }
-
-    // Eliminar un usuario por ID
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUsuario(@PathVariable int id) {
-        usuarioService.deleteById(id);
-        return ResponseEntity.noContent().build();
+    public String eliminarUsuario(@PathVariable int id) {
+        boolean eliminado = usuarioService.eliminarPorId(id);
+        return eliminado ? "Usuario eliminado" : "Usuario no encontrado";
+    }
+
+    // Solo para pruebas de lista enlazada (memoria)
+    @GetMapping("/lista")
+    public void imprimirLista() {
+        usuarioService.imprimirLista();
+    }
+
+    @GetMapping("/vacia")
+    public boolean estaVacia() {
+        return usuarioService.estaVacia();
+    }
+
+    @DeleteMapping("/inicio")
+    public void eliminarInicio() {
+        usuarioService.eliminarInicio();
+    }
+
+    @DeleteMapping("/final")
+    public void eliminarFinal() {
+        usuarioService.eliminarFinal();
     }
 }

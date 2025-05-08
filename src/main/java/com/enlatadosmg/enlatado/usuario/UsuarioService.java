@@ -18,13 +18,39 @@ public class UsuarioService  {
         listaUsuarios.insertarAlFinal(usuario);
         return usuarioRepository.save(usuario);
     }
+    public List<ModeloUsuario> obtenerTodos(){
+        return usuarioRepository.findAll();
+    }
+    // Buscar por ID en base de datos
+    public ModeloUsuario buscarPorId(int id) {
+        return usuarioRepository.findById(id).orElse(null);
+    }
 
-    //eliminar usuario
-    public boolean eliminarUsuario(int id){
+    // Eliminar por ID en lista y base de datos
+    public boolean eliminarPorId(int id) {
+        boolean eliminadoLista = listaUsuarios.eliminarPorId(id);
         if (usuarioRepository.existsById(id)) {
-            usuarioRepository.deleteAllById(id);
-            listaUsuarios.eliminarAlFinal();
+            usuarioRepository.deleteById(id);
+            return true;
         }
+        return eliminadoLista;
+    }
+
+    // Métodos de la lista enlazada (solo en memoria)
+    public void imprimirLista() {
+        listaUsuarios.imprimir();
+    }
+
+    public boolean estaVacia() {
+        return listaUsuarios.estaVacia();
+    }
+
+    public void eliminarInicio() {
+        listaUsuarios.eliminarAlFrente();
+    }
+
+    public void eliminarFinal() {
+        listaUsuarios.eliminarAlFinal();
     }
 
 }
