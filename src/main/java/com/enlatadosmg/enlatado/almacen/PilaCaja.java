@@ -1,33 +1,47 @@
 package com.enlatadosmg.enlatado.almacen;
 
+
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+
+@Component
 public class PilaCaja {
-    private NodoCaja cima;
+    private CajaRepository cajaRepository;
+    private AtomicInteger contadorCorrelativo = new AtomicInteger(1);
 
-    public PilaCaja(NodoCaja cima) {
-        this.cima = null;
+    public PilaCaja(CajaRepository cajaRepository){
+        this.cajaRepository = cajaRepository;
+        inicializarCorrelativo();
     }
-    //agregar una caja a la pila
-    public void push(Caja caja){
-        NodoCaja nuevoNodo = new NodoCaja(caja);
-        nuevoNodo.setSiguiente(cima);
-        cima = nuevoNodo;
-    }
-    //retirar la caja de la cima de la pila
-    public Caja pop(){
-        if  (cima == null){
-            return  null; // la pila esta vacia
+    public void inicializarCorrelativo(){
+        List<Caja> caja = cajaRepository.findAll();
+        if(!caja.isEmpty()){
+            int max = caja.stream().mapToInt(Caja::getCorrelativo).max().orElse(0);
+            contadorCorrelativo.set(max + 1);
         }
-        Caja cajaRetirada = cima.getCaja();
-        cima = cima.getSiguiente();
-        return cajaRetirada;
     }
-    //ver la caja en la cima de la pila
-    public Caja peek(){
-        return (cima != null) ? cima.getCaja() : null;
+    public Caja pushCaja() {
+        Caja nueva = new Caja(contadorCorrelativo.getAndIncrement());
+        return cajaRepository.save(nueva);
+    }
+    public Caja popCaja(){
+        List<Caja> cajas = cajaRepository.findAll();
+        if (cajas.isEmpty()) return null;
 
+        // Retirar la última ingresada (comportamiento LIFO)
+        Caja ultima = cajas.get(cajas.size() - 1);
+        cajaRepository.delete(ultima);
+        return ultima;
     }
-    public boolean isEmpty(){
-        return cima == null;
+
+    public List<Caja> listarCajas() {
+        return cajaRepository.findAll();
+    }
+
+    public boolean estaVacia() {
+        return cajaRepository.count() == 0;
     }
 
 

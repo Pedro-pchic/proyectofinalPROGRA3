@@ -1,21 +1,28 @@
 package com.enlatadosmg.enlatado.almacen;
 
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
+@Entity
+@Table(name = "almacen")
 public class Caja {
-    private int id;
-    private String contenido;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private  int id;
+    private int correlativo;
+    private LocalDate fechaIngreso;
 
     public Caja() {
 
     }
 
-    public Caja(String contenido, int id) {
-        this.contenido = contenido;
-        this.id = id;
+    public Caja(int correlativo) {
+        this.correlativo = correlativo;
+        this.fechaIngreso = LocalDate.now();
     }
-
 }
