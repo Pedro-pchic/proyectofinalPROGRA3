@@ -1,4 +1,4 @@
-package com.enlatadosmg.enlatado.repartidor;
+package com.enlatadosmg.enlatado.cliente;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -9,14 +9,14 @@ import lombok.Setter;
 @Setter
 @Getter
 @Entity
-@Table(name = "repartidor")
-public class Repartidor {
+@Table(name = "clientes")
+public class ClienteEntity {
     @Id
-    private String cui;
+    private int cui;
     private String nombre;
     private String apellido;
-    private String licencia;
     private String telefono;
+    private String direccion;
 
 
 }
